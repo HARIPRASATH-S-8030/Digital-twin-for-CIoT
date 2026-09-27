@@ -1,0 +1,181 @@
+[
+    {
+        "id": "ad661d68adfd6f40",
+        "type": "mqtt in",
+        "z": "14cd3ae701bf07a4",
+        "name": "",
+        "topic": "building/room1/telemetry",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "f367508f70c96147",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 210,
+        "y": 360,
+        "wires": [
+            [
+                "3fceb9d0c40eb14d"
+            ]
+        ]
+    },
+    {
+        "id": "3fceb9d0c40eb14d",
+        "type": "json",
+        "z": "14cd3ae701bf07a4",
+        "name": "",
+        "property": "payload",
+        "action": "obj",
+        "pretty": false,
+        "x": 390,
+        "y": 280,
+        "wires": [
+            [
+                "3512849958e3eb59",
+                "53b7d8566c61223b"
+            ]
+        ]
+    },
+    {
+        "id": "3512849958e3eb59",
+        "type": "function",
+        "z": "14cd3ae701bf07a4",
+        "name": "function 1",
+        "func": "// Map the JSON values into an array for SQL parameterization\nmsg.payload = [\n    msg.payload.temperature,\n    msg.payload.humidity,\n    msg.payload.gas_resistance_kOhm,\n    msg.payload.lux,\n    msg.payload.power_W,\n    msg.payload.voltage_V,\n    msg.payload.occupied,\n    msg.payload.moving_dist_cm,\n    msg.payload.static_dist_cm,\n    msg.payload.moving_energy,\n    msg.payload.static_energy\n];\n\n// Define the SQL INSERT statement\nmsg.query = `\n    INSERT INTO room_telemetry (\n        temperature, humidity, gas_resistance, lux, power_w, voltage_v, \n        occupied, moving_dist_cm, static_dist_cm, moving_energy, static_energy\n    ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11);\n`;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 540,
+        "y": 360,
+        "wires": [
+            [
+                "c71709de6d426bb7",
+                "ed1a46cac7945ea5"
+            ]
+        ]
+    },
+    {
+        "id": "c71709de6d426bb7",
+        "type": "postgresql",
+        "z": "14cd3ae701bf07a4",
+        "name": "",
+        "query": "",
+        "postgreSQLConfig": "368af803752fec81",
+        "split": false,
+        "rowsPerMsg": 1,
+        "outputs": 1,
+        "x": 730,
+        "y": 280,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "ed1a46cac7945ea5",
+        "type": "debug",
+        "z": "14cd3ae701bf07a4",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 720,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "53b7d8566c61223b",
+        "type": "websocket out",
+        "z": "14cd3ae701bf07a4",
+        "name": "",
+        "server": "c493e954126f6cbe",
+        "client": "",
+        "x": 570,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "f367508f70c96147",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "6d0849ed5b2c45e28817f92fd7a12dd5.s1.eu.hivemq.cloud",
+        "port": "8883",
+        "tls": "bb57979c4d2f5a85",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": true,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "368af803752fec81",
+        "type": "postgreSQLConfig",
+        "name": "mit_ece@dpg-dasigsojo6nc73buaomg-a:5432/postgres",
+        "host": "dpg-dasigsojo6nc73buaomg-a",
+        "hostFieldType": "str",
+        "port": "5432",
+        "portFieldType": "num",
+        "database": "postgres",
+        "databaseFieldType": "str",
+        "ssl": "true",
+        "sslFieldType": "bool",
+        "max": "10",
+        "maxFieldType": "num",
+        "min": "1",
+        "minFieldType": "num",
+        "idle": "1000",
+        "idleFieldType": "num",
+        "connectionTimeout": "10000",
+        "connectionTimeoutFieldType": "num",
+        "user": "mit_ece",
+        "userFieldType": "str",
+        "password": "mgvqOGcJbvfEVKfYgI94IS64nQDMs5cI",
+        "passwordFieldType": "str"
+    },
+    {
+        "id": "c493e954126f6cbe",
+        "type": "websocket-listener",
+        "path": "/ws/twin",
+        "wholemsg": "false"
+    },
+    {
+        "id": "bb57979c4d2f5a85",
+        "type": "tls-config",
+        "name": "",
+        "cert": "",
+        "key": "",
+        "ca": "",
+        "certname": "",
+        "keyname": "",
+        "caname": "",
+        "servername": "",
+        "verifyservercert": true,
+        "alpnprotocol": ""
+    }
+]
