@@ -1,0 +1,11 @@
+{
+  "name": "node-red-cloud",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "node-red -p $PORT"
+  },
+  "dependencies": {
+    "node-red": "^3.1.0",
+    "node-red-contrib-postgresql": "^0.3.0"
+  }
+}
