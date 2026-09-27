@@ -2,7 +2,7 @@
   "name": "node-red-cloud",
   "version": "1.0.0",
   "scripts": {
-    "start": "node-red -p $PORT -s settings.js flows.json"
+    "start": "node-red -p $PORT --userDir ./data"
   },
   "dependencies": {
     "node-red": "^3.1.0",
